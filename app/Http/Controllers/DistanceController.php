@@ -12,6 +12,7 @@ class DistanceController extends Controller
     // calc distance
     public function calculateDistance(Request $request)
     {
+        /// check for valid data
         $validator = Validator::make($request->all(), [
             'current_x' => 'required|numeric',
             'current_y' => 'required|numeric',
@@ -63,17 +64,17 @@ class DistanceController extends Controller
             $allRoutes = [];
 
             foreach ($data['features'] as $feature) {
-                $distance = $feature['properties']['segments'][0]['distance'] / 1000; // المسافة بالكيلومترات
-                $geometry = $feature['geometry']; // الشكل الهندسي كجيوسون
+                $distance = $feature['properties']['segments'][0]['distance'] / 1000; //Distance in kilometers
+                $geometry = $feature['geometry']; // path (geometric shape)
 
-                $allDistances[] = $distance; // تخزين المسافة في مصفوفة
-                $allRoutes[] = $geometry; // تخزين الشكل الهندسي في مصفوفة
+                $allDistances[] = $distance; //Store the distance in a matrix
+                $allRoutes[] = $geometry; // Storing the geometric shape in a matrix
             }
 
             $distancesJson = json_encode($allDistances);
             $routesJson = json_encode($allRoutes);
 
-            // تسجيل المسافة في قاعدة البيانات
+            // Record the distance in the database
             $distanceRecord = Distance::create([
                 'current_x' => $currentX,
                 'current_y' => $currentY,
@@ -178,11 +179,11 @@ public function updateDistance(Request $request, $id)
         $allRoutes = [];
 
         foreach ($data['features'] as $feature) {
-            $distance = $feature['properties']['segments'][0]['distance'] / 1000; // المسافة بالكيلومترات
-            $geometry = $feature['geometry']; // الشكل الهندسي كجيوسون
+            $distance = $feature['properties']['segments'][0]['distance'] / 1000; //Distance in kilometers
+            $geometry = $feature['geometry']; //  path (geometric shape)
 
-            $allDistances[] = $distance; // تخزين المسافة في مصفوفة
-            $allRoutes[] = $geometry; // تخزين الشكل الهندسي في مصفوفة
+            $allDistances[] = $distance; //Store the distance in a matrix
+            $allRoutes[] = $geometry; // Storing the geometric shape in a matrix
         }
 
         $distancesJson = json_encode($allDistances);
@@ -233,7 +234,7 @@ public function updateDistance(Request $request, $id)
 
 
 
-    // عرض المسافة على الصفحة
+    // View the distance on the page
     public function showDistance($id)
     {
         $distance = Distance::find($id);
